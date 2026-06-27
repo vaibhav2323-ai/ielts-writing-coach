@@ -1,18 +1,10 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import { Analytics } from '@vercel/analytics/next';
 import type { Metadata, Viewport } from 'next';
-import { Inter, Geist_Mono } from 'next/font/google';
+import { Inter } from 'next/font/google';
 import './globals.css';
 
-const inter = Inter({
-  variable: '--font-inter',
-  subsets: ['latin'],
-  display: 'swap',
-});
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-});
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'Lexia — IELTS Writing Coach',
@@ -52,7 +44,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html
         lang="en"
-        className={`dark ${inter.variable} ${geistMono.variable} bg-background`}
+        className={`dark ${inter.className} bg-background`}
         suppressHydrationWarning
       >
         <body className="font-sans antialiased">
