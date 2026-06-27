@@ -22,7 +22,7 @@ type Progress = {
 function Avatar({ src, name }: { src?: string | null; name?: string | null }) {
   const initials = name ? name.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase() : "?";
   if (src) {
-    return <img src={src} alt={name ?? "Avatar"} className="w-20 h-20 rounded-full object-cover" style={{ ring: "2px solid #2a2a2a" }} />;
+    return <img src={src} alt={name ?? "Avatar"} className="w-20 h-20 rounded-full object-cover" style={{ outline: "2px solid #2a2a2a" }} />;
   }
   return (
     <div className="w-20 h-20 rounded-full flex items-center justify-center" style={{ background: "rgba(79,70,229,0.12)", border: "2px solid rgba(79,70,229,0.25)" }}>

@@ -211,8 +211,7 @@ function FlipCard({ word, flipped, onFlip }: { word: VocabWord; flipped: boolean
       <motion.div animate={{ rotateY: flipped ? 180 : 0 }} transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
         style={{ transformStyle: "preserve-3d", position: "relative", minHeight: "300px" }}>
         <div style={{ backfaceVisibility: "hidden" }}
-          className="absolute inset-0 rounded-lg flex flex-col items-center justify-center gap-4 p-8"
-          style2={{ background: "#111111", border: "1px solid #222222" } as React.CSSProperties}>
+          className="absolute inset-0 rounded-lg flex flex-col items-center justify-center gap-4 p-8">
           <div className="absolute inset-0 rounded-lg" style={{ background: "#111111", border: "1px solid #222222" }} />
           <div className="relative z-10 flex flex-col items-center gap-4">
             <p className="text-[10px] font-semibold uppercase tracking-widest" style={{ color: "#444" }}>Tap to reveal</p>
