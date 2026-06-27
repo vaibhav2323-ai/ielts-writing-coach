@@ -7,8 +7,6 @@ import {
   Copy, Check, Search, X, MessageSquare, ChevronDown, ChevronUp,
   Sparkles, Loader2, AlertCircle, Lightbulb, BookOpen,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -365,20 +363,12 @@ const TASK1_TYPES: EssayType[] = ["Task 1 Overview", "Task 1 Body", "Task 1 Tren
 function CopyButton({ text }: { text: string }) {
   const [copied, setCopied] = useState(false);
   function handle() {
-    navigator.clipboard.writeText(text).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1800);
-    });
+    navigator.clipboard.writeText(text).then(() => { setCopied(true); setTimeout(() => setCopied(false), 1800); });
   }
   return (
-    <button
-      onClick={handle}
-      className={`flex items-center gap-1.5 text-xs font-medium px-2.5 py-1.5 rounded-md transition-colors ${
-        copied
-          ? "bg-green-500/15 text-green-400"
-          : "bg-zinc-800/70 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-200"
-      }`}
-    >
+    <button onClick={handle}
+      className="flex items-center gap-1.5 text-xs font-medium px-2.5 py-1.5 rounded-md transition-colors"
+      style={{ background: copied ? "rgba(34,197,94,0.12)" : "#1a1a1a", color: copied ? "#4ade80" : "#666", border: `1px solid ${copied ? "rgba(34,197,94,0.3)" : "#2a2a2a"}` }}>
       {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
       {copied ? "Copied!" : "Copy"}
     </button>
@@ -387,27 +377,27 @@ function CopyButton({ text }: { text: string }) {
 
 function BandBadge({ band }: { band: Band }) {
   return (
-    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
-      band === 9
-        ? "bg-amber-500/15 text-amber-400 border-amber-500/25"
-        : "bg-violet-500/15 text-violet-400 border-violet-500/25"
-    }`}>Band {band}</span>
+    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full border" style={{
+      background: band === 9 ? "rgba(245,158,11,0.12)" : "rgba(139,92,246,0.12)",
+      color: band === 9 ? "#fbbf24" : "#a78bfa",
+      borderColor: band === 9 ? "rgba(245,158,11,0.3)" : "rgba(139,92,246,0.3)",
+    }}>Band {band}</span>
   );
 }
 
 function TaskBadge({ task }: { task: TaskType }) {
   return (
-    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
-      task === "Task 1"
-        ? "bg-blue-500/15 text-blue-400 border-blue-500/25"
-        : "bg-green-500/15 text-green-400 border-green-500/25"
-    }`}>{task}</span>
+    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full border" style={{
+      background: task === "Task 1" ? "rgba(6,182,212,0.12)" : "rgba(34,197,94,0.12)",
+      color: task === "Task 1" ? "#22d3ee" : "#4ade80",
+      borderColor: task === "Task 1" ? "rgba(6,182,212,0.3)" : "rgba(34,197,94,0.3)",
+    }}>{task}</span>
   );
 }
 
 function TypeBadge({ type }: { type: EssayType }) {
   return (
-    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-zinc-800 text-zinc-400 border border-zinc-700/50">
+    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full" style={{ background: "#1a1a1a", color: "#666", border: "1px solid #2a2a2a" }}>
       {type}
     </span>
   );
@@ -429,71 +419,49 @@ function AIResultCard({ result, onDismiss }: { result: AIResult; onDismiss: () =
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: -8 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -8 }}
-      transition={{ duration: 0.25 }}
-      className="rounded-xl border-2 border-blue-500/40 bg-blue-950/15 mb-8"
-    >
-      {/* Header */}
+    <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.25 }}
+      className="rounded-xl mb-8" style={{ border: "2px solid rgba(79,70,229,0.4)", background: "rgba(79,70,229,0.05)" }}>
       <div className="flex items-start justify-between gap-3 p-5 pb-4">
         <div className="flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-blue-500/15 shrink-0">
-            <Sparkles className="h-4 w-4 text-blue-400" />
+          <div className="p-2 rounded-lg shrink-0" style={{ background: "rgba(79,70,229,0.12)" }}>
+            <Sparkles className="h-4 w-4" style={{ color: "#4F46E5" }} />
           </div>
           <div>
             <div className="flex items-center gap-2 flex-wrap mb-1">
-              <span className="text-[10px] font-bold text-blue-400 uppercase tracking-widest">
-                AI Recommended
-              </span>
+              <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: "#4F46E5" }}>AI Recommended</span>
               <BandBadge band={result.band} />
-              <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-blue-500/15 text-blue-400 border border-blue-500/25">
-                {result.essayType}
-              </span>
+              <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full" style={{ background: "rgba(79,70,229,0.12)", color: "#818cf8", border: "1px solid rgba(79,70,229,0.25)" }}>{result.essayType}</span>
             </div>
-            <h3 className="text-sm font-semibold text-zinc-100">{result.templateName}</h3>
+            <h3 className="text-sm font-semibold text-white">{result.templateName}</h3>
           </div>
         </div>
-        <button onClick={onDismiss} className="text-zinc-600 hover:text-zinc-400 transition-colors">
+        <button onClick={onDismiss} style={{ color: "#555" }}>
           <X className="h-4 w-4" />
         </button>
       </div>
 
-      {/* Explanation */}
-      <div className="mx-5 mb-4 rounded-lg bg-blue-500/8 border border-blue-500/15 px-4 py-3 flex gap-2.5">
-        <Lightbulb className="h-3.5 w-3.5 text-blue-400 shrink-0 mt-0.5" />
-        <p className="text-xs text-zinc-400 leading-relaxed">{result.explanation}</p>
+      <div className="mx-5 mb-4 rounded-lg px-4 py-3 flex gap-2.5" style={{ background: "rgba(79,70,229,0.07)", border: "1px solid rgba(79,70,229,0.15)" }}>
+        <Lightbulb className="h-3.5 w-3.5 shrink-0 mt-0.5" style={{ color: "#4F46E5" }} />
+        <p className="text-xs leading-relaxed" style={{ color: "#888" }}>{result.explanation}</p>
       </div>
 
-      {/* Template text */}
       <div className="mx-5 mb-4">
-        <div
-          className="rounded-lg bg-zinc-950/60 border border-zinc-800/40 p-4 cursor-pointer"
-          onClick={() => setExpanded((v) => !v)}
-        >
-          <p className="text-xs text-zinc-300 leading-relaxed font-mono whitespace-pre-wrap">
-            {expanded
-              ? result.customizedTemplate
-              : result.customizedTemplate.slice(0, 200) + "…"}
+        <div className="rounded-lg p-4 cursor-pointer" style={{ background: "rgba(0,0,0,0.3)", border: "1px solid #1a1a1a" }} onClick={() => setExpanded((v) => !v)}>
+          <p className="text-xs leading-relaxed font-mono whitespace-pre-wrap" style={{ color: "#ccc" }}>
+            {expanded ? result.customizedTemplate : result.customizedTemplate.slice(0, 200) + "…"}
           </p>
         </div>
-        <button
-          onClick={() => setExpanded((v) => !v)}
-          className="flex items-center gap-1 text-[11px] text-zinc-600 hover:text-zinc-400 mt-1.5 transition-colors"
-        >
+        <button onClick={() => setExpanded((v) => !v)} className="flex items-center gap-1 mt-1.5 text-[11px]" style={{ color: "#555" }}>
           {expanded ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
           {expanded ? "Show less" : "Show full template"}
         </button>
       </div>
 
-      {/* Actions */}
       <div className="flex items-center gap-2 px-5 pb-5">
         <CopyButton text={result.customizedTemplate} />
-        <button
-          onClick={handleUseInChat}
-          className="flex items-center gap-1.5 text-xs font-medium px-2.5 py-1.5 rounded-md bg-blue-600/20 text-blue-400 border border-blue-500/25 hover:bg-blue-600/30 hover:text-blue-300 transition-colors"
-        >
+        <button onClick={handleUseInChat}
+          className="flex items-center gap-1.5 text-xs font-medium px-2.5 py-1.5 rounded-md transition-colors"
+          style={{ background: "rgba(79,70,229,0.12)", color: "#818cf8", border: "1px solid rgba(79,70,229,0.25)" }}>
           <MessageSquare className="h-3 w-3" />
           Use in Chat
         </button>
@@ -518,50 +486,34 @@ function TemplateCard({ t }: { t: Template }) {
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 6 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.18 }}
-      className="rounded-xl border border-zinc-800/60 bg-zinc-900 flex flex-col"
-    >
+    <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.18 }}
+      className="rounded-xl flex flex-col" style={{ border: "1px solid #222222", background: "#111111" }}>
       <div className="p-4">
-        {/* Header */}
         <div className="flex items-start justify-between gap-2 mb-2.5">
-          <h3 className="text-sm font-semibold text-zinc-100 leading-snug">{t.name}</h3>
+          <h3 className="text-sm font-semibold leading-snug text-white">{t.name}</h3>
           <div className="flex gap-1.5 shrink-0 flex-wrap justify-end">
             <TaskBadge task={t.task} />
             <BandBadge band={t.band} />
           </div>
         </div>
-        <div className="mb-2.5">
-          <TypeBadge type={t.type} />
-        </div>
+        <div className="mb-2.5"><TypeBadge type={t.type} /></div>
 
-        {/* Template text */}
-        <div
-          className="rounded-lg bg-zinc-950/60 border border-zinc-800/40 p-3 mb-2 cursor-pointer"
-          onClick={() => setExpanded((v) => !v)}
-        >
-          <p className="text-xs text-zinc-400 leading-relaxed font-mono whitespace-pre-wrap">
+        <div className="rounded-lg p-3 mb-2 cursor-pointer" style={{ background: "rgba(0,0,0,0.25)", border: "1px solid #1a1a1a" }} onClick={() => setExpanded((v) => !v)}>
+          <p className="text-xs leading-relaxed font-mono whitespace-pre-wrap" style={{ color: "#888" }}>
             {expanded ? t.text : t.text.slice(0, 130) + (t.text.length > 130 ? "…" : "")}
           </p>
         </div>
 
-        <button
-          onClick={() => setExpanded((v) => !v)}
-          className="flex items-center gap-1 text-[11px] text-zinc-600 hover:text-zinc-400 transition-colors mb-3"
-        >
+        <button onClick={() => setExpanded((v) => !v)} className="flex items-center gap-1 text-[11px] mb-3" style={{ color: "#555" }}>
           {expanded ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
           {expanded ? "Show less" : "Show full template"}
         </button>
 
-        {/* Actions */}
         <div className="flex items-center gap-2">
           <CopyButton text={t.text} />
-          <button
-            onClick={handleUseInChat}
-            className="flex items-center gap-1.5 text-xs font-medium px-2.5 py-1.5 rounded-md bg-blue-600/15 text-blue-400 border border-blue-500/20 hover:bg-blue-600/25 hover:text-blue-300 transition-colors"
-          >
+          <button onClick={handleUseInChat}
+            className="flex items-center gap-1.5 text-xs font-medium px-2.5 py-1.5 rounded-md transition-colors"
+            style={{ background: "rgba(79,70,229,0.1)", color: "#818cf8", border: "1px solid rgba(79,70,229,0.2)" }}>
             <MessageSquare className="h-3 w-3" />
             Use in Chat
           </button>
@@ -571,17 +523,37 @@ function TemplateCard({ t }: { t: Template }) {
   );
 }
 
+// ─── Filter button helpers ────────────────────────────────────────────────────
+
+function FilterBtn({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
+  return (
+    <button onClick={onClick}
+      className="px-3 py-2 text-xs font-semibold transition-colors whitespace-nowrap"
+      style={{ background: active ? "#4F46E5" : "#111111", color: active ? "white" : "#555" }}>
+      {children}
+    </button>
+  );
+}
+
+function PillBtn({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
+  return (
+    <button onClick={onClick}
+      className="px-3 py-1.5 rounded-full text-xs font-medium transition-colors"
+      style={{ background: active ? "#4F46E5" : "#111111", color: active ? "white" : "#888", border: active ? "none" : "1px solid #222222" }}>
+      {children}
+    </button>
+  );
+}
+
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function TemplatesPage() {
-  // ── Smart finder state ──
   const [question, setQuestion] = useState("");
   const [finding, setFinding] = useState(false);
   const [aiResult, setAiResult] = useState<AIResult | null>(null);
   const [aiError, setAiError] = useState<string | null>(null);
   const resultRef = useRef<HTMLDivElement>(null);
 
-  // ── Library filter state ──
   const [search, setSearch] = useState("");
   const [taskFilter, setTaskFilter] = useState<"all" | "Task 1" | "Task 2">("all");
   const [typeFilter, setTypeFilter] = useState<EssayType | "all">("all");
@@ -589,13 +561,10 @@ export default function TemplatesPage() {
 
   async function handleFind() {
     if (!question.trim()) return;
-    setFinding(true);
-    setAiResult(null);
-    setAiError(null);
+    setFinding(true); setAiResult(null); setAiError(null);
     try {
       const res = await fetch("/api/find-template", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ question: question.trim() }),
       });
       if (!res.ok) throw new Error(`Request failed: ${res.status}`);
@@ -610,14 +579,12 @@ export default function TemplatesPage() {
     }
   }
 
-  // Filter the available essay types based on task filter
   const visibleTypes = useMemo(() => {
     if (taskFilter === "Task 1") return TASK1_TYPES;
     if (taskFilter === "Task 2") return TASK2_TYPES;
     return ALL_TYPES;
   }, [taskFilter]);
 
-  // Auto-reset typeFilter if current type not available for task
   const effectiveTypeFilter = useMemo<EssayType | "all">(() => {
     if (typeFilter === "all") return "all";
     if (taskFilter === "Task 1" && TASK2_TYPES.includes(typeFilter as EssayType)) return "all";
@@ -638,189 +605,136 @@ export default function TemplatesPage() {
 
   return (
     <div className="p-6 md:p-8 max-w-6xl">
-
-      {/* ── Page header ── */}
       <div className="mb-7">
-        <h2 className="text-xl font-semibold text-zinc-100 mb-0.5">Essay Templates</h2>
-        <p className="text-sm text-zinc-500">
+        <h1 className="text-xl font-bold text-white mb-0.5" style={{ letterSpacing: "-0.02em" }}>Essay Templates</h1>
+        <p className="text-sm" style={{ color: "#888" }}>
           {TEMPLATES.length} Band 8–9 templates · paste your question to get an AI-customised recommendation
         </p>
       </div>
 
-      {/* ══ SMART TEMPLATE FINDER ══ */}
-      <div className="rounded-xl border border-zinc-800/60 bg-zinc-900 p-5 mb-8">
+      {/* Smart Template Finder */}
+      <div className="rounded-xl p-5 mb-8" style={{ background: "#111111", border: "1px solid #222222" }}>
         <div className="flex items-center gap-2.5 mb-4">
-          <div className="p-1.5 rounded-lg bg-blue-500/10">
-            <Sparkles className="h-4 w-4 text-blue-400" />
+          <div className="p-1.5 rounded-lg" style={{ background: "rgba(79,70,229,0.1)" }}>
+            <Sparkles className="h-4 w-4" style={{ color: "#4F46E5" }} />
           </div>
           <div>
-            <h3 className="text-sm font-semibold text-zinc-100">Smart Template Finder</h3>
-            <p className="text-xs text-zinc-500">Paste your IELTS question and AI will match the perfect template</p>
+            <h3 className="text-sm font-semibold text-white">Smart Template Finder</h3>
+            <p className="text-xs" style={{ color: "#555" }}>Paste your IELTS question and AI will match the perfect template</p>
           </div>
         </div>
 
         <div className="space-y-3">
           <div>
-            <Label className="text-xs font-medium text-zinc-400 mb-1.5 block">
-              Your IELTS Question
-            </Label>
+            <label className="block text-xs font-medium mb-1.5" style={{ color: "#888" }}>Your IELTS Question</label>
             <textarea
               value={question}
               onChange={(e) => setQuestion(e.target.value)}
               onKeyDown={(e) => { if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) handleFind(); }}
               placeholder={`Paste any IELTS question here…\n\ne.g. "Some people think that governments should pay for healthcare. Others believe individuals should be responsible for their own healthcare costs. Discuss both views and give your own opinion."`}
               rows={4}
-              className="w-full rounded-md border border-zinc-800/60 bg-zinc-950/60 px-3 py-2.5 text-sm text-zinc-200 placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 resize-none"
+              className="w-full rounded-lg px-3 py-2.5 text-sm placeholder:text-[#333] text-white focus:outline-none focus:ring-1 focus:ring-[#4F46E5] resize-none"
+              style={{ background: "#0a0a0a", border: "1px solid #222222", colorScheme: "dark" }}
             />
           </div>
 
           <div className="flex items-center gap-3">
-            <Button
-              onClick={handleFind}
-              disabled={finding || !question.trim()}
-              className="gap-2"
-            >
-              {finding
-                ? <><Loader2 className="h-3.5 w-3.5 animate-spin" /> Analysing…</>
-                : <><Sparkles className="h-3.5 w-3.5" /> Find Best Template</>}
-            </Button>
+            <button onClick={handleFind} disabled={finding || !question.trim()}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white transition-colors disabled:opacity-40"
+              style={{ background: "#4F46E5" }}>
+              {finding ? <><Loader2 className="h-3.5 w-3.5 animate-spin" />Analysing…</> : <><Sparkles className="h-3.5 w-3.5" />Find Best Template</>}
+            </button>
             {question && (
-              <button
-                onClick={() => { setQuestion(""); setAiResult(null); setAiError(null); }}
-                className="text-xs text-zinc-600 hover:text-zinc-400 transition-colors"
-              >
-                Clear
-              </button>
+              <button onClick={() => { setQuestion(""); setAiResult(null); setAiError(null); }}
+                className="text-xs transition-colors" style={{ color: "#555" }}>Clear</button>
             )}
-            <span className="text-xs text-zinc-700 ml-auto hidden sm:block">⌘ Enter to run</span>
+            <span className="text-xs ml-auto hidden sm:block" style={{ color: "#444" }}>⌘ Enter to run</span>
           </div>
         </div>
 
-        {/* Error */}
         {aiError && (
-          <div className="flex items-start gap-2 rounded-lg border border-red-800/40 bg-red-950/20 p-3 mt-3">
+          <div className="flex items-start gap-2 rounded-lg p-3 mt-3" style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)" }}>
             <AlertCircle className="h-4 w-4 text-red-400 shrink-0 mt-0.5" />
             <p className="text-xs text-red-400">{aiError}</p>
           </div>
         )}
 
-        {/* Loading shimmer */}
         {finding && (
-          <div className="mt-4 rounded-xl border border-blue-500/20 bg-blue-950/10 p-6 flex flex-col items-center gap-3">
-            <Loader2 className="h-6 w-6 animate-spin text-blue-400" />
-            <p className="text-xs text-zinc-500">Analysing question type and matching template…</p>
+          <div className="mt-4 rounded-xl p-6 flex flex-col items-center gap-3" style={{ border: "1px solid rgba(79,70,229,0.2)", background: "rgba(79,70,229,0.05)" }}>
+            <Loader2 className="h-6 w-6 animate-spin" style={{ color: "#4F46E5" }} />
+            <p className="text-xs" style={{ color: "#555" }}>Analysing question type and matching template…</p>
           </div>
         )}
       </div>
 
-      {/* AI result */}
       <div ref={resultRef}>
         <AnimatePresence>
-          {aiResult && !finding && (
-            <AIResultCard result={aiResult} onDismiss={() => setAiResult(null)} />
-          )}
+          {aiResult && !finding && <AIResultCard result={aiResult} onDismiss={() => setAiResult(null)} />}
         </AnimatePresence>
       </div>
 
-      {/* ══ TEMPLATE LIBRARY ══ */}
-      <div className="border-t border-zinc-800/60 pt-7">
+      {/* Template Library */}
+      <div className="pt-7" style={{ borderTop: "1px solid #222222" }}>
         <div className="flex items-center gap-2.5 mb-5">
-          <div className="p-1.5 rounded-lg bg-zinc-800/50">
-            <BookOpen className="h-4 w-4 text-zinc-400" />
+          <div className="p-1.5 rounded-lg" style={{ background: "#1a1a1a" }}>
+            <BookOpen className="h-4 w-4" style={{ color: "#555" }} />
           </div>
           <div>
-            <h3 className="text-sm font-semibold text-zinc-100">Template Library</h3>
-            <p className="text-xs text-zinc-500">{displayed.length} of {TEMPLATES.length} templates</p>
+            <h3 className="text-sm font-semibold text-white">Template Library</h3>
+            <p className="text-xs" style={{ color: "#555" }}>{displayed.length} of {TEMPLATES.length} templates</p>
           </div>
         </div>
 
-        {/* Filters row */}
+        {/* Filter row */}
         <div className="flex flex-wrap gap-2 mb-4">
-          {/* Search */}
           <div className="relative flex-1 min-w-40">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-zinc-500 pointer-events-none" />
-            <input
-              type="text"
-              placeholder="Search templates…"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full rounded-md border border-zinc-800/60 bg-zinc-900 pl-9 pr-8 py-2 text-sm text-zinc-200 placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
-            />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 pointer-events-none" style={{ color: "#555" }} />
+            <input type="text" placeholder="Search templates…" value={search} onChange={(e) => setSearch(e.target.value)}
+              className="w-full rounded-lg pl-9 pr-8 py-2 text-sm text-white placeholder:text-[#444] focus:outline-none focus:ring-1 focus:ring-[#4F46E5]"
+              style={{ background: "#111111", border: "1px solid #222222" }} />
             {search && (
-              <button onClick={() => setSearch("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300">
+              <button onClick={() => setSearch("")} className="absolute right-3 top-1/2 -translate-y-1/2" style={{ color: "#555" }}>
                 <X className="h-3.5 w-3.5" />
               </button>
             )}
           </div>
 
-          {/* Task filter */}
-          <div className="flex rounded-md border border-zinc-800/60 overflow-hidden shrink-0">
-            {(["all", "Task 1", "Task 2"] as const).map((f) => (
-              <button key={f} onClick={() => { setTaskFilter(f); setTypeFilter("all"); }}
-                className={`px-3 py-2 text-xs font-semibold transition-colors whitespace-nowrap ${
-                  taskFilter === f ? "bg-blue-600 text-white" : "bg-zinc-900 text-zinc-500 hover:bg-zinc-800 hover:text-zinc-300"
-                }`}>
-                {f === "all" ? "All Tasks" : f}
-              </button>
-            ))}
+          <div className="flex rounded-lg overflow-hidden shrink-0" style={{ border: "1px solid #222222" }}>
+            <FilterBtn active={taskFilter === "all"} onClick={() => { setTaskFilter("all"); setTypeFilter("all"); }}>All Tasks</FilterBtn>
+            <FilterBtn active={taskFilter === "Task 1"} onClick={() => { setTaskFilter("Task 1"); setTypeFilter("all"); }}>Task 1</FilterBtn>
+            <FilterBtn active={taskFilter === "Task 2"} onClick={() => { setTaskFilter("Task 2"); setTypeFilter("all"); }}>Task 2</FilterBtn>
           </div>
 
-          {/* Band filter */}
-          <div className="flex rounded-md border border-zinc-800/60 overflow-hidden shrink-0">
-            {(["all", "8", "9"] as const).map((f) => (
-              <button key={f} onClick={() => setBandFilter(f)}
-                className={`px-3 py-2 text-xs font-semibold transition-colors ${
-                  bandFilter === f ? "bg-blue-600 text-white" : "bg-zinc-900 text-zinc-500 hover:bg-zinc-800 hover:text-zinc-300"
-                }`}>
-                {f === "all" ? "All Bands" : `Band ${f}`}
-              </button>
-            ))}
+          <div className="flex rounded-lg overflow-hidden shrink-0" style={{ border: "1px solid #222222" }}>
+            <FilterBtn active={bandFilter === "all"} onClick={() => setBandFilter("all")}>All Bands</FilterBtn>
+            <FilterBtn active={bandFilter === "8"} onClick={() => setBandFilter("8")}>Band 8</FilterBtn>
+            <FilterBtn active={bandFilter === "9"} onClick={() => setBandFilter("9")}>Band 9</FilterBtn>
           </div>
         </div>
 
-        {/* Essay type pills */}
+        {/* Type pills */}
         <div className="flex flex-wrap gap-1.5 mb-5">
-          <button onClick={() => setTypeFilter("all")}
-            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
-              effectiveTypeFilter === "all" ? "bg-blue-600 text-white" : "bg-zinc-800/60 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200"
-            }`}>
-            All Types
-          </button>
+          <PillBtn active={effectiveTypeFilter === "all"} onClick={() => setTypeFilter("all")}>All Types</PillBtn>
           {visibleTypes.map((type) => (
-            <button key={type} onClick={() => setTypeFilter(type)}
-              className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
-                effectiveTypeFilter === type ? "bg-blue-600 text-white" : "bg-zinc-800/60 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200"
-              }`}>
-              {TYPE_LABELS[type]}
-            </button>
+            <PillBtn key={type} active={effectiveTypeFilter === type} onClick={() => setTypeFilter(type)}>{TYPE_LABELS[type]}</PillBtn>
           ))}
         </div>
 
         {/* Grid */}
         <AnimatePresence mode="wait">
           {displayed.length > 0 ? (
-            <motion.div
-              key={`${taskFilter}-${effectiveTypeFilter}-${bandFilter}-${search}`}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.15 }}
-              className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4"
-            >
+            <motion.div key={`${taskFilter}-${effectiveTypeFilter}-${bandFilter}-${search}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15 }}
+              className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
               {displayed.map((t) => <TemplateCard key={t.id} t={t} />)}
             </motion.div>
           ) : (
-            <motion.div
-              key="empty"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="flex flex-col items-center justify-center py-14 gap-3 text-center"
-            >
-              <p className="text-sm text-zinc-500">No templates match your filters</p>
+            <motion.div key="empty" initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+              className="flex flex-col items-center justify-center py-14 gap-3 text-center">
+              <p className="text-sm" style={{ color: "#555" }}>No templates match your filters</p>
               <div className="flex flex-wrap gap-2 justify-center">
-                {search && <button onClick={() => setSearch("")} className="text-xs text-blue-400 hover:text-blue-300">Clear search</button>}
-                {taskFilter !== "all" && <button onClick={() => setTaskFilter("all")} className="text-xs text-blue-400 hover:text-blue-300">Clear task filter</button>}
-                {bandFilter !== "all" && <button onClick={() => setBandFilter("all")} className="text-xs text-blue-400 hover:text-blue-300">Clear band filter</button>}
+                {search && <button onClick={() => setSearch("")} className="text-xs" style={{ color: "#4F46E5" }}>Clear search</button>}
+                {taskFilter !== "all" && <button onClick={() => setTaskFilter("all")} className="text-xs" style={{ color: "#4F46E5" }}>Clear task filter</button>}
+                {bandFilter !== "all" && <button onClick={() => setBandFilter("all")} className="text-xs" style={{ color: "#4F46E5" }}>Clear band filter</button>}
               </div>
             </motion.div>
           )}

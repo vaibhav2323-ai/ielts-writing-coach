@@ -1,42 +1,38 @@
 import { currentUser } from "@clerk/nextjs/server";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { DashboardStats } from "@/components/dashboard/dashboard-stats";
 import { auth } from "@clerk/nextjs/server";
 import { supabase } from "@/lib/supabase";
+import { DashboardStats } from "@/components/dashboard/dashboard-stats";
+import { ArrowUpRight, FileCheck2, MessageSquare, Sparkles, CalendarCheck } from "lucide-react";
 
-const actions = [
+const quickStart = [
   {
-    label: "Daily Practice",
-    href: "/dashboard/practice",
-    icon: "✏️",
-    desc: "Grammar, vocabulary & essay tasks",
-    color: "#6366f1",
-    glow: "rgba(99,102,241,0.12)",
-  },
-  {
-    label: "AI Chat",
-    href: "/dashboard/chat",
-    icon: "🤖",
-    desc: "Get writing guidance from AI",
-    color: "#8b5cf6",
-    glow: "rgba(139,92,246,0.12)",
-  },
-  {
-    label: "Essay Evaluator",
     href: "/dashboard/evaluator",
-    icon: "📝",
-    desc: "Score your writing instantly",
-    color: "#10b981",
-    glow: "rgba(16,185,129,0.12)",
+    icon: <FileCheck2 className="h-5 w-5" />,
+    iconColor: "#4F46E5",
+    title: "Evaluate an essay",
+    desc: "Get an instant band score with detailed criterion feedback.",
   },
   {
-    label: "Vocabulary",
-    href: "/dashboard/vocabulary",
-    icon: "📖",
-    desc: "Expand your academic word list",
-    color: "#f59e0b",
-    glow: "rgba(245,158,11,0.12)",
+    href: "/dashboard/chat",
+    icon: <MessageSquare className="h-5 w-5" />,
+    iconColor: "#10b981",
+    title: "Ask the AI coach",
+    desc: "Brainstorm ideas, fix grammar, or refine an argument.",
+  },
+  {
+    href: "/dashboard/generator",
+    icon: <Sparkles className="h-5 w-5" />,
+    iconColor: "#f59e0b",
+    title: "Generate a question",
+    desc: "Practice with fresh Task 1 and Task 2 prompts.",
+  },
+  {
+    href: "/dashboard/practice",
+    icon: <CalendarCheck className="h-5 w-5" />,
+    iconColor: "#8b5cf6",
+    title: "Daily practice",
+    desc: "A focused 15-minute drill picked for your level.",
   },
 ];
 
@@ -45,7 +41,6 @@ export default async function DashboardPage() {
   const user = await currentUser();
   const firstName = user?.firstName ?? null;
 
-  // Fetch real progress data
   let progressData = {
     current_band: null as number | null,
     essays_completed: 0,
@@ -71,99 +66,78 @@ export default async function DashboardPage() {
     }
   }
 
-  const greeting = firstName
-    ? `Good to see you, ${firstName}.`
-    : "Welcome back.";
-
   return (
-    <div className="p-6 md:p-8 max-w-5xl space-y-10">
+    <div className="p-6 md:p-8 max-w-3xl space-y-10">
 
       {/* Greeting */}
-      <div className="animate-fade-up">
+      <div>
         <h1
-          className="text-2xl font-bold"
-          style={{ color: "#f8f8ff", letterSpacing: "-0.02em" }}
+          className="text-2xl font-bold text-white mb-1"
+          style={{ letterSpacing: "-0.025em" }}
         >
-          {greeting}
+          {firstName ? `Welcome back, ${firstName}` : "Welcome back"}
         </h1>
-        <p className="text-sm mt-1" style={{ color: "#6b7280" }}>
-          Here&apos;s a snapshot of your progress.
+        <p style={{ fontSize: "14px", color: "#888" }}>
+          {progressData.current_band
+            ? `You're ${(9 - progressData.current_band).toFixed(1)} band away from your target. Here's where things stand today.`
+            : "Here's your dashboard. Start practising to track your progress."}
         </p>
       </div>
 
-      {/* Stat cards */}
-      <section className="animate-fade-up" style={{ animationDelay: "0.05s" }}>
-        <p className="label mb-3">Overview</p>
-        <DashboardStats
-          band={progressData.current_band}
-          essays={progressData.essays_completed}
-          words={progressData.words_learned}
-          streak={progressData.streak_days}
-        />
-      </section>
+      {/* Stats */}
+      <DashboardStats
+        band={progressData.current_band}
+        essays={progressData.essays_completed}
+        words={progressData.words_learned}
+        streak={progressData.streak_days}
+      />
 
-      {/* Quick actions */}
-      <section className="animate-fade-up" style={{ animationDelay: "0.1s" }}>
-        <p className="label mb-3">Quick start</p>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          {actions.map((a) => (
+      {/* Quick start */}
+      <div>
+        <p
+          className="mb-4"
+          style={{
+            fontSize: "11px",
+            fontWeight: 600,
+            letterSpacing: "0.08em",
+            textTransform: "uppercase",
+            color: "#555",
+          }}
+        >
+          Quick Start
+        </p>
+        <div className="grid grid-cols-2 gap-3">
+          {quickStart.map((item) => (
             <Link
-              key={a.href}
-              href={a.href}
-              className="group flex flex-col gap-3 rounded-xl p-4 transition-all duration-200 card-interactive"
-              style={{
-                background: "#111118",
-                border: "1px solid #1e1e2e",
-              }}
+              key={item.href}
+              href={item.href}
+              className="group relative flex flex-col gap-3 rounded-lg p-5 transition-colors hover:bg-[#161616]"
+              style={{ background: "#111111", border: "1px solid #222222" }}
             >
-              <div
-                className="w-9 h-9 rounded-lg flex items-center justify-center text-lg transition-transform duration-200 group-hover:scale-110"
-                style={{ background: a.glow }}
-              >
-                {a.icon}
+              <div className="flex items-start justify-between">
+                <div
+                  className="w-9 h-9 rounded-lg flex items-center justify-center"
+                  style={{ background: "#1a1a1a", color: item.iconColor }}
+                >
+                  {item.icon}
+                </div>
+                <ArrowUpRight
+                  className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity"
+                  style={{ color: "#555" }}
+                />
               </div>
               <div>
-                <p
-                  className="text-sm font-semibold leading-tight mb-0.5"
-                  style={{ color: "#f0f0fa", letterSpacing: "-0.01em" }}
-                >
-                  {a.label}
+                <p className="text-sm font-semibold text-white mb-0.5" style={{ letterSpacing: "-0.01em" }}>
+                  {item.title}
                 </p>
-                <p className="text-[11px] leading-snug" style={{ color: "#6b7280" }}>
-                  {a.desc}
+                <p style={{ fontSize: "12px", color: "#888", lineHeight: 1.5 }}>
+                  {item.desc}
                 </p>
               </div>
             </Link>
           ))}
         </div>
-      </section>
-
-      {/* Recent activity empty state */}
-      <section className="animate-fade-up" style={{ animationDelay: "0.15s" }}>
-        <p className="label mb-3">Recent activity</p>
-        <div
-          className="rounded-xl p-10 flex flex-col items-center text-center gap-3"
-          style={{ background: "#111118", border: "1px solid #1e1e2e" }}
-        >
-          <div
-            className="w-12 h-12 rounded-full flex items-center justify-center text-2xl"
-            style={{ background: "rgba(99,102,241,0.1)" }}
-          >
-            📓
-          </div>
-          <div>
-            <p className="text-sm font-semibold" style={{ color: "#f0f0fa" }}>
-              No activity yet
-            </p>
-            <p className="text-xs mt-1 max-w-xs" style={{ color: "#6b7280" }}>
-              Complete your first practice task to see your writing history here.
-            </p>
-          </div>
-          <Button asChild size="sm" className="mt-1">
-            <Link href="/dashboard/practice">Start practising</Link>
-          </Button>
-        </div>
-      </section>
+      </div>
 
     </div>
   );

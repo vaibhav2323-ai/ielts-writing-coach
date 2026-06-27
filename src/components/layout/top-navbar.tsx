@@ -23,48 +23,34 @@ export function TopNav() {
 
   return (
     <header
-      className="flex h-[52px] shrink-0 items-center justify-between px-4 z-10"
-      style={{
-        background: "#0a0a0f",
-        borderBottom: "1px solid #1e1e2e",
-      }}
+      className="flex h-12 shrink-0 items-center justify-between px-5 z-10"
+      style={{ background: "#0a0a0a", borderBottom: "1px solid #1a1a1a" }}
     >
       {/* Left */}
       <div className="flex items-center gap-3">
         {/* Mobile logo */}
-        <div className="flex lg:hidden items-center gap-2.5">
+        <div className="flex lg:hidden items-center gap-2">
           <span
-            className="flex h-[26px] w-[26px] items-center justify-center rounded-lg shrink-0"
-            style={{
-              background: "linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)",
-              boxShadow: "0 2px 10px rgba(99,102,241,0.4)",
-            }}
+            className="flex h-6 w-6 items-center justify-center rounded-md shrink-0"
+            style={{ background: "#4F46E5" }}
           >
-            <span style={{ fontSize: "11px", fontWeight: 900, color: "white", lineHeight: 1 }}>
-              I
-            </span>
+            <span style={{ fontSize: "11px", fontWeight: 800, color: "white", lineHeight: 1 }}>L</span>
           </span>
-          <span
-            className="text-sm font-bold gradient-text"
-            style={{ letterSpacing: "-0.02em" }}
-          >
-            IELTS Writing
+          <span className="text-sm font-semibold text-white" style={{ letterSpacing: "-0.02em" }}>
+            Lexia
           </span>
         </div>
 
         {/* Desktop page title */}
         <span
-          className="hidden lg:block text-sm font-semibold"
-          style={{ color: "#f0f0fa", letterSpacing: "-0.01em" }}
+          className="hidden lg:block text-sm font-medium text-white"
+          style={{ letterSpacing: "-0.01em" }}
         >
           {title}
         </span>
 
-        {/* Mobile subtitle */}
-        <span
-          className="lg:hidden text-xs ml-1"
-          style={{ color: "#6b7280" }}
-        >
+        {/* Mobile page subtitle */}
+        <span className="lg:hidden text-xs" style={{ color: "#666" }}>
           {title}
         </span>
       </div>
@@ -73,8 +59,8 @@ export function TopNav() {
       <div className="flex items-center gap-3">
         {isLoaded && user && (
           <span
-            className="hidden sm:block text-xs select-none max-w-[180px] truncate"
-            style={{ color: "#6b7280" }}
+            className="hidden sm:block text-xs select-none max-w-[160px] truncate"
+            style={{ color: "#666" }}
           >
             {user.fullName ?? user.firstName ?? user.primaryEmailAddress?.emailAddress}
           </span>
@@ -84,7 +70,6 @@ export function TopNav() {
           appearance={{
             elements: {
               avatarBox: "h-7 w-7",
-              userButtonAvatarBox: "ring-1 ring-indigo-500/30",
             },
           }}
         />

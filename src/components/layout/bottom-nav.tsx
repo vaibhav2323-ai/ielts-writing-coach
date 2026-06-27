@@ -15,10 +15,10 @@ export function BottomNav() {
 
   return (
     <nav
-      className="lg:hidden fixed bottom-0 inset-x-0 z-50 flex h-16 backdrop-blur-xl"
+      className="lg:hidden fixed bottom-0 inset-x-0 z-50 flex h-16"
       style={{
-        background: "rgba(13,13,20,0.92)",
-        borderTop: "1px solid #1e1e2e",
+        background: "#0a0a0a",
+        borderTop: "1px solid #1a1a1a",
         paddingBottom: "env(safe-area-inset-bottom)",
       }}
     >
@@ -31,26 +31,12 @@ export function BottomNav() {
             key={item.href}
             href={item.href}
             className={cn(
-              "flex flex-1 flex-col items-center justify-center gap-1 transition-colors",
-              active ? "" : "text-zinc-600 hover:text-zinc-400"
+              "flex flex-1 flex-col items-center justify-center gap-1 transition-colors"
             )}
-            style={
-              active
-                ? { color: "#818cf8" }
-                : {}
-            }
+            style={{ color: active ? "#fff" : "#555" }}
           >
-            <Icon
-              className="h-5 w-5 transition-colors"
-              strokeWidth={active ? 2.2 : 1.75}
-            />
-            <span
-              style={{
-                fontSize: "10px",
-                fontWeight: active ? 600 : 500,
-                letterSpacing: "0.03em",
-              }}
-            >
+            <Icon className="h-5 w-5" strokeWidth={active ? 2 : 1.75} />
+            <span style={{ fontSize: "10px", fontWeight: active ? 600 : 400 }}>
               {item.label}
             </span>
           </Link>
