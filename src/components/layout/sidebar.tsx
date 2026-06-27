@@ -30,33 +30,34 @@ export function Sidebar() {
           width: collapsed ? 48 : 220,
           transition: "width 0.2s ease",
           background: "#0a0a0a",
-          borderRight: "1px solid #1a1a1a",
+          borderRight: "1px solid #222222",
         }}
       >
         {/* Logo */}
         <div
           className="flex h-12 items-center shrink-0 px-3"
-          style={{ borderBottom: "1px solid #1a1a1a" }}
+          style={{ borderBottom: "1px solid #222222" }}
         >
           {collapsed ? (
             <button
               onClick={() => setCollapsed(false)}
               className="flex w-full justify-center"
+              aria-label="Expand sidebar"
             >
               <LogoMark />
             </button>
           ) : (
-            <div className="flex items-center gap-2 w-full">
+            <div className="flex items-center gap-2.5 w-full">
               <LogoMark />
               <span
-                className="text-sm font-semibold text-white truncate"
+                className="text-sm font-bold text-white truncate"
                 style={{ letterSpacing: "-0.02em" }}
               >
-                Lexia
+                IELTS Coach
               </span>
               <button
                 onClick={() => setCollapsed(true)}
-                className="ml-auto p-1 rounded-md hover:bg-white/5 transition-colors"
+                className="ml-auto p-1 rounded transition-colors hover:bg-[#1a1a1a]"
                 style={{ color: "#555" }}
                 aria-label="Collapse sidebar"
               >
@@ -67,18 +68,18 @@ export function Sidebar() {
         </div>
 
         {/* Nav */}
-        <nav className="flex-1 overflow-y-auto overflow-x-hidden py-3 px-2 space-y-4">
+        <nav className="flex-1 overflow-y-auto overflow-x-hidden py-4 px-2 space-y-5">
           {navSections.map((section, si) => (
             <div key={section.label}>
               {!collapsed && (
                 <p
-                  className="px-2 mb-1 select-none"
+                  className="px-3 mb-1.5 select-none"
                   style={{
-                    fontSize: "11px",
-                    fontWeight: 500,
-                    letterSpacing: "0.06em",
+                    fontSize: "10px",
+                    fontWeight: 600,
+                    letterSpacing: "0.08em",
                     textTransform: "uppercase",
-                    color: "#3a3a3a",
+                    color: "#555",
                   }}
                 >
                   {section.label}
@@ -86,8 +87,8 @@ export function Sidebar() {
               )}
               {collapsed && si > 0 && (
                 <div
-                  className="mx-auto mb-2 h-px w-4"
-                  style={{ background: "#1a1a1a" }}
+                  className="mx-auto mb-3 h-px w-5"
+                  style={{ background: "#222222" }}
                 />
               )}
               <ul className="space-y-0.5">
@@ -99,16 +100,24 @@ export function Sidebar() {
                     <Link
                       href={item.href}
                       className={cn(
-                        "flex items-center gap-2.5 rounded-lg py-1.5 text-sm transition-colors",
-                        collapsed ? "justify-center px-2" : "px-2.5",
+                        "flex items-center gap-2.5 rounded-[6px] py-1.5 text-sm transition-colors",
+                        collapsed ? "justify-center px-2" : "px-3",
                         active
                           ? "text-white"
-                          : "hover:bg-white/5 hover:text-white"
+                          : "text-[#888] hover:text-white hover:bg-[#1a1a1a]"
                       )}
                       style={
                         active
-                          ? { background: "rgba(255,255,255,0.08)", color: "white" }
-                          : { color: "#888" }
+                          ? {
+                              background: "#1a1a1a",
+                              color: "white",
+                              borderLeft: collapsed ? "none" : "2px solid #4F46E5",
+                              paddingLeft: collapsed ? undefined : "10px",
+                            }
+                          : {
+                              borderLeft: collapsed ? "none" : "2px solid transparent",
+                              paddingLeft: collapsed ? undefined : "10px",
+                            }
                       }
                     >
                       <Icon
@@ -130,9 +139,10 @@ export function Sidebar() {
                             side="right"
                             style={{
                               background: "#1a1a1a",
-                              border: "1px solid #2a2a2a",
+                              border: "1px solid #222222",
                               color: "#fff",
                               fontSize: "12px",
+                              borderRadius: "6px",
                             }}
                           >
                             {item.label}
@@ -153,9 +163,9 @@ export function Sidebar() {
         {!collapsed && (
           <div
             className="shrink-0 px-4 py-3"
-            style={{ borderTop: "1px solid #1a1a1a" }}
+            style={{ borderTop: "1px solid #222222" }}
           >
-            <p style={{ fontSize: "11px", color: "#333" }}>Band 9 AI Coach</p>
+            <p style={{ fontSize: "11px", color: "#444" }}>Band 9 AI Coach</p>
           </div>
         )}
       </aside>
@@ -166,7 +176,7 @@ export function Sidebar() {
 function LogoMark() {
   return (
     <span
-      className="flex h-6 w-6 items-center justify-center rounded-md shrink-0"
+      className="flex h-6 w-6 items-center justify-center rounded-[6px] shrink-0"
       style={{ background: "#4F46E5" }}
     >
       <span style={{ fontSize: "11px", fontWeight: 800, color: "white", lineHeight: 1 }}>

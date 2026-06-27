@@ -2,7 +2,6 @@ import { currentUser } from "@clerk/nextjs/server";
 import Link from "next/link";
 import { auth } from "@clerk/nextjs/server";
 import { supabase } from "@/lib/supabase";
-import { DashboardStats } from "@/components/dashboard/dashboard-stats";
 import { ArrowUpRight, FileCheck2, MessageSquare, Sparkles, CalendarCheck } from "lucide-react";
 
 const quickStart = [
@@ -36,6 +35,13 @@ const quickStart = [
   },
 ];
 
+function getGreeting() {
+  const hour = new Date().getUTCHours();
+  if (hour < 12) return "Good morning";
+  if (hour < 17) return "Good afternoon";
+  return "Good evening";
+}
+
 export default async function DashboardPage() {
   const { userId } = await auth();
   const user = await currentUser();
@@ -66,18 +72,37 @@ export default async function DashboardPage() {
     }
   }
 
+  const stats = [
+    {
+      label: "Band Score",
+      value: progressData.current_band != null ? progressData.current_band.toFixed(1) : "—",
+    },
+    {
+      label: "Essays Done",
+      value: String(progressData.essays_completed),
+    },
+    {
+      label: "Words Learned",
+      value: String(progressData.words_learned),
+    },
+    {
+      label: "Day Streak",
+      value: String(progressData.streak_days),
+    },
+  ];
+
   return (
-    <div className="p-6 md:p-8 max-w-3xl space-y-10">
+    <div className="p-8 md:p-10 max-w-4xl space-y-12">
 
       {/* Greeting */}
       <div>
         <h1
-          className="text-2xl font-bold text-white mb-1"
-          style={{ letterSpacing: "-0.025em" }}
+          className="text-3xl font-bold text-white mb-2"
+          style={{ letterSpacing: "-0.03em" }}
         >
-          {firstName ? `Welcome back, ${firstName}` : "Welcome back"}
+          {getGreeting()}{firstName ? `, ${firstName}` : ""}
         </h1>
-        <p style={{ fontSize: "14px", color: "#888" }}>
+        <p style={{ fontSize: "14px", color: "#888", lineHeight: 1.6 }}>
           {progressData.current_band
             ? `You're ${(9 - progressData.current_band).toFixed(1)} band away from your target. Here's where things stand today.`
             : "Here's your dashboard. Start practising to track your progress."}
@@ -85,19 +110,36 @@ export default async function DashboardPage() {
       </div>
 
       {/* Stats */}
-      <DashboardStats
-        band={progressData.current_band}
-        essays={progressData.essays_completed}
-        words={progressData.words_learned}
-        streak={progressData.streak_days}
-      />
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {stats.map((stat) => (
+          <div
+            key={stat.label}
+            className="rounded-[8px] p-5"
+            style={{
+              background: "#111111",
+              border: "1px solid #222222",
+              borderTop: "2px solid #4F46E5",
+            }}
+          >
+            <p
+              className="text-3xl font-bold text-white tabular"
+              style={{ letterSpacing: "-0.03em", lineHeight: 1 }}
+            >
+              {stat.value}
+            </p>
+            <p className="mt-2 text-xs" style={{ color: "#888" }}>
+              {stat.label}
+            </p>
+          </div>
+        ))}
+      </div>
 
       {/* Quick start */}
       <div>
         <p
           className="mb-4"
           style={{
-            fontSize: "11px",
+            fontSize: "10px",
             fontWeight: 600,
             letterSpacing: "0.08em",
             textTransform: "uppercase",
@@ -106,17 +148,17 @@ export default async function DashboardPage() {
         >
           Quick Start
         </p>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {quickStart.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className="group relative flex flex-col gap-3 rounded-lg p-5 transition-colors hover:bg-[#161616]"
+              className="group flex flex-col gap-4 rounded-[8px] p-5 transition-colors hover:bg-[#1a1a1a]"
               style={{ background: "#111111", border: "1px solid #222222" }}
             >
               <div className="flex items-start justify-between">
                 <div
-                  className="w-9 h-9 rounded-lg flex items-center justify-center"
+                  className="w-9 h-9 rounded-[6px] flex items-center justify-center"
                   style={{ background: "#1a1a1a", color: item.iconColor }}
                 >
                   {item.icon}
@@ -127,10 +169,13 @@ export default async function DashboardPage() {
                 />
               </div>
               <div>
-                <p className="text-sm font-semibold text-white mb-0.5" style={{ letterSpacing: "-0.01em" }}>
+                <p
+                  className="text-sm font-semibold text-white mb-1"
+                  style={{ letterSpacing: "-0.01em" }}
+                >
                   {item.title}
                 </p>
-                <p style={{ fontSize: "12px", color: "#888", lineHeight: 1.5 }}>
+                <p style={{ fontSize: "12px", color: "#888", lineHeight: 1.6 }}>
                   {item.desc}
                 </p>
               </div>

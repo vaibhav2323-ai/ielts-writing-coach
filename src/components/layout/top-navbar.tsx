@@ -23,28 +23,28 @@ export function TopNav() {
 
   return (
     <header
-      className="flex h-12 shrink-0 items-center justify-between px-5 z-10"
-      style={{ background: "#0a0a0a", borderBottom: "1px solid #1a1a1a" }}
+      className="flex h-12 shrink-0 items-center justify-between px-6 z-10"
+      style={{ background: "#080808", borderBottom: "1px solid #222222" }}
     >
-      {/* Left */}
+      {/* Left — page title */}
       <div className="flex items-center gap-3">
         {/* Mobile logo */}
         <div className="flex lg:hidden items-center gap-2">
           <span
-            className="flex h-6 w-6 items-center justify-center rounded-md shrink-0"
+            className="flex h-6 w-6 items-center justify-center rounded-[6px] shrink-0"
             style={{ background: "#4F46E5" }}
           >
             <span style={{ fontSize: "11px", fontWeight: 800, color: "white", lineHeight: 1 }}>L</span>
           </span>
-          <span className="text-sm font-semibold text-white" style={{ letterSpacing: "-0.02em" }}>
-            Lexia
+          <span className="text-sm font-bold text-white" style={{ letterSpacing: "-0.02em" }}>
+            IELTS Coach
           </span>
         </div>
 
         {/* Desktop page title */}
         <span
-          className="hidden lg:block text-sm font-medium text-white"
-          style={{ letterSpacing: "-0.01em" }}
+          className="hidden lg:block text-sm font-semibold text-white"
+          style={{ letterSpacing: "-0.015em" }}
         >
           {title}
         </span>
@@ -55,12 +55,12 @@ export function TopNav() {
         </span>
       </div>
 
-      {/* Right */}
+      {/* Right — user info + avatar */}
       <div className="flex items-center gap-3">
         {isLoaded && user && (
           <span
             className="hidden sm:block text-xs select-none max-w-[160px] truncate"
-            style={{ color: "#666" }}
+            style={{ color: "#555" }}
           >
             {user.fullName ?? user.firstName ?? user.primaryEmailAddress?.emailAddress}
           </span>

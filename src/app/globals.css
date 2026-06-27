@@ -30,14 +30,14 @@
   --chart-3: #f59e0b;
   --chart-4: #38bdf8;
   --chart-5: #ef4444;
-  --radius: 0.5rem;
+  --radius: 8px;
   --sidebar: #0a0a0a;
   --sidebar-foreground: #888888;
   --sidebar-primary: #4f46e5;
   --sidebar-primary-foreground: #ffffff;
   --sidebar-accent: #1a1a1a;
   --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: #1c1c1c;
+  --sidebar-border: #222222;
   --sidebar-ring: #4f46e5;
 }
 
@@ -75,7 +75,7 @@
   --sidebar-primary-foreground: #ffffff;
   --sidebar-accent: #1a1a1a;
   --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: #1c1c1c;
+  --sidebar-border: #222222;
   --sidebar-ring: #4f46e5;
 }
 
@@ -106,18 +106,17 @@
   }
 }
 
-/* thin, unobtrusive scrollbars to match the flat aesthetic */
 * {
   scrollbar-width: thin;
-  scrollbar-color: #2a2a2a transparent;
+  scrollbar-color: #222222 transparent;
 }
 *::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 4px;
+  height: 4px;
 }
 *::-webkit-scrollbar-thumb {
-  background: #2a2a2a;
-  border-radius: 8px;
+  background: #222222;
+  border-radius: 2px;
 }
 *::-webkit-scrollbar-thumb:hover {
   background: #333333;
