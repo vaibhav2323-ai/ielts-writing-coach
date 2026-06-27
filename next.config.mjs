@@ -29,27 +29,6 @@ const securityHeaders = [
   // - unsafe-eval / unsafe-inline required by Next.js + Clerk
   // - Supabase, Groq, Clerk endpoints whitelisted in connect-src
   // - Google Fonts whitelisted for Inter
-  {
-    key: "Content-Security-Policy",
-    value: [
-      "default-src 'self'",
-      "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://*.clerk.accounts.dev https://*.clerk.com https://clerk.browser-telemetry.com https://*.ielts-writing-coach-seven.vercel.app",
-      "style-src 'self' 'unsafe-inline'",
-      "img-src 'self' data: https:",
-      "font-src 'self' data:",
-      [
-        "connect-src 'self'",
-        "https://*.supabase.co",
-        "https://api.groq.com",
-        "https://*.clerk.accounts.dev",
-        "https://*.clerk.com",
-        "https://clerk.browser-telemetry.com",
-      ].join(" "),
-      "frame-src 'self' https://*.clerk.accounts.dev https://*.clerk.com",
-      "base-uri 'self'",
-      "form-action 'self'",
-    ].join("; "),
-  },
 ];
 
 const nextConfig = {
