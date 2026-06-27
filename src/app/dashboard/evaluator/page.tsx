@@ -1,11 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useUser } from "@clerk/nextjs";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Textarea } from "@/components/ui/textarea";
-import { supabase } from "@/lib/supabase";
-import { upsertUser } from "@/lib/supabase-chat";
 import { Loader2, Send, RotateCcw, CheckCircle2, AlertCircle } from "lucide-react";
 
 type CriterionResult = { score: number; feedback: string };
@@ -19,6 +16,7 @@ type EvaluationResult = {
   mistakes: Mistake[];
   improved_essay: string;
   band9_version: string;
+  saved?: boolean;
 };
 
 function bandColor(score: number) {
@@ -62,27 +60,18 @@ const SELECT_CLS = "w-full rounded-lg border px-3 py-2 text-sm text-white focus:
 const SELECT_STYLE = { background: "#111111", borderColor: "#222222", colorScheme: "dark" } as React.CSSProperties;
 
 export default function EvaluatorPage() {
-  const { user, isLoaded } = useUser();
-  const [supabaseUserId, setSupabaseUserId] = useState<string | null>(null);
   const [essay, setEssay] = useState("");
   const [taskType, setTaskType] = useState<"task1" | "task2">("task2");
   const [question, setQuestion] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<EvaluationResult | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [saved, setSaved] = useState(false);
-
-  useEffect(() => {
-    if (!isLoaded || !user) return;
-    upsertUser(user.id, user.primaryEmailAddress?.emailAddress ?? "", user.fullName ?? null, user.imageUrl ?? null)
-      .then(setSupabaseUserId).catch(console.error);
-  }, [isLoaded, user]);
 
   const wordCount = essay.trim() === "" ? 0 : essay.trim().split(/\s+/).length;
 
   async function handleSubmit() {
     if (!essay.trim() || wordCount < 50) return;
-    setLoading(true); setError(null); setResult(null); setSaved(false);
+    setLoading(true); setError(null); setResult(null);
     try {
       const res = await fetch("/api/evaluate", {
         method: "POST", headers: { "Content-Type": "application/json" },
@@ -92,14 +81,6 @@ export default function EvaluatorPage() {
       const data: EvaluationResult = await res.json();
       if (data.overall_band === undefined) throw new Error("Invalid response from evaluator");
       setResult(data);
-      if (supabaseUserId) {
-        const { error: dbErr } = await supabase.from("essays").insert({
-          user_id: supabaseUserId, task_type: taskType,
-          question: question.trim() || "No question provided",
-          content: essay, band_score: data.overall_band, feedback: JSON.stringify(data),
-        });
-        if (!dbErr) setSaved(true);
-      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
     } finally {
@@ -108,7 +89,7 @@ export default function EvaluatorPage() {
   }
 
   function handleReset() {
-    setEssay(""); setQuestion(""); setResult(null); setError(null); setSaved(false);
+    setEssay(""); setQuestion(""); setResult(null); setError(null);
   }
 
   return (
@@ -184,7 +165,7 @@ export default function EvaluatorPage() {
                   <p style={{ fontSize: "12px", color: "#888", marginTop: 4 }}>
                     {result.overall_band >= 7 ? "Good — above average performance" : result.overall_band >= 5 ? "Modest — meaningful room for improvement" : "Limited — significant development needed"}
                   </p>
-                  {saved && <p className="flex items-center gap-1 mt-2" style={{ fontSize: "11px", color: "#22c55e" }}><CheckCircle2 className="h-3 w-3" />Saved to your progress</p>}
+                  {result.saved && <p className="flex items-center gap-1 mt-2" style={{ fontSize: "11px", color: "#22c55e" }}><CheckCircle2 className="h-3 w-3" />Saved to your progress</p>}
                 </div>
               </div>
             </div>

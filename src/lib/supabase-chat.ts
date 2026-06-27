@@ -67,7 +67,18 @@ export async function deleteChat(chatId: string, userId: string): Promise<void> 
   if (error) throw error;
 }
 
-export async function loadMessages(chatId: string): Promise<DBMessage[]> {
+/** Loads messages only after verifying the chat belongs to userId. */
+export async function loadMessages(chatId: string, userId: string): Promise<DBMessage[]> {
+  // Ownership check: confirm this chat belongs to the requesting user
+  const { data: chat } = await supabase
+    .from("chats")
+    .select("id")
+    .eq("id", chatId)
+    .eq("user_id", userId)
+    .single();
+
+  if (!chat) return []; // Chat not found or doesn't belong to this user
+
   const { data, error } = await supabase
     .from("messages")
     .select("*")
@@ -78,11 +89,23 @@ export async function loadMessages(chatId: string): Promise<DBMessage[]> {
   return data ?? [];
 }
 
+/** Saves a message only after verifying the chat belongs to userId. */
 export async function saveMessage(
   chatId: string,
   role: "user" | "assistant",
-  content: string
-): Promise<DBMessage> {
+  content: string,
+  userId: string
+): Promise<DBMessage | null> {
+  // Ownership check: confirm this chat belongs to the requesting user
+  const { data: chat } = await supabase
+    .from("chats")
+    .select("id")
+    .eq("id", chatId)
+    .eq("user_id", userId)
+    .single();
+
+  if (!chat) return null; // Reject silently to avoid breaking the UI flow
+
   const { data, error } = await supabase
     .from("messages")
     .insert({ chat_id: chatId, role, content })
@@ -93,10 +116,12 @@ export async function saveMessage(
   return data;
 }
 
-export async function touchChat(chatId: string): Promise<void> {
+/** Updates chat timestamp only if it belongs to userId. */
+export async function touchChat(chatId: string, userId: string): Promise<void> {
   const { error } = await supabase
     .from("chats")
     .update({ updated_at: new Date().toISOString() })
-    .eq("id", chatId);
+    .eq("id", chatId)
+    .eq("user_id", userId);
   if (error) throw error;
 }

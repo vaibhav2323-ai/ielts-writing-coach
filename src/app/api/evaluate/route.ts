@@ -3,6 +3,7 @@ import Groq from "groq-sdk";
 import { NextRequest, NextResponse } from "next/server";
 import { rateLimit, rateLimitResponse } from "@/lib/rate-limit";
 import { sanitizeInput, wrapUserInput, ANTI_INJECTION_FOOTER, MAX_LENGTHS } from "@/lib/sanitize";
+import { supabase } from "@/lib/supabase";
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
@@ -66,7 +67,32 @@ export async function POST(req: NextRequest) {
 
     const content = response.choices[0]?.message?.content ?? "{}";
     const result = JSON.parse(content);
-    return NextResponse.json(result);
+
+    // Save to essays table server-side (best-effort — evaluation returned regardless)
+    let saved = false;
+    try {
+      const { data: userRow } = await supabase
+        .from("users")
+        .select("id")
+        .eq("clerk_id", userId)
+        .single();
+
+      if (userRow) {
+        const { error: dbErr } = await supabase.from("essays").insert({
+          user_id: userRow.id,
+          task_type: taskType as "task1" | "task2",
+          question: sanitizedQuestion || "No question provided",
+          content: sanitizedEssay,
+          band_score: typeof result.overall_band === "number" ? result.overall_band : null,
+          feedback: JSON.stringify(result),
+        });
+        if (!dbErr) saved = true;
+      }
+    } catch {
+      // Non-fatal: essay still returned to client
+    }
+
+    return NextResponse.json({ ...result, saved });
   } catch (err) {
     console.error("[evaluate] error:", err instanceof Error ? err.message : err);
     return NextResponse.json({ error: "Something went wrong. Please try again." }, { status: 500 });

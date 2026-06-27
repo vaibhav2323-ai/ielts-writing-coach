@@ -66,7 +66,7 @@ export function ChatInterface() {
     setCurrentChatId(chat.id);
     setMessages([]);
     try {
-      const msgs = await loadMessages(chat.id);
+      const msgs = await loadMessages(chat.id, supabaseUserIdRef.current!);
       setMessages(msgs.map((m) => ({ id: m.id, role: m.role, content: m.content })));
     } catch (e) {
       console.error("Load messages:", e);
@@ -80,8 +80,9 @@ export function ChatInterface() {
   }, []);
 
   const handleDeleteChat = useCallback(async (chatId: string) => {
-    if (!user?.id) return;
-    try { await deleteChat(chatId, user.id); } catch {}
+    if (!supabaseUserIdRef.current) return;
+    // Use Supabase UUID (not Clerk user.id) — this is what chats.user_id stores
+    try { await deleteChat(chatId, supabaseUserIdRef.current); } catch {}
     setChats((prev) => prev.filter((c) => c.id !== chatId));
     if (currentChatIdRef.current === chatId) {
       setCurrentChatId(null);
@@ -140,8 +141,8 @@ export function ChatInterface() {
 
       if (!hadError && fullContent && supUserId) {
         try {
-          await saveMessage(chatId, "assistant", fullContent);
-          await touchChat(chatId);
+          await saveMessage(chatId, "assistant", fullContent, supUserId);
+          await touchChat(chatId, supUserId);
           setChats(await loadChats(supUserId));
         } catch {}
       }
@@ -183,7 +184,7 @@ export function ChatInterface() {
       }
 
       if (supUserId && chatId) {
-        try { await saveMessage(chatId, "user", content); } catch {}
+        try { await saveMessage(chatId, "user", content, supUserId); } catch {}
       }
 
       if (chatId && supUserId) {
